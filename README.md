@@ -27,7 +27,7 @@ KrishiVue is a mobile application designed for plant leaf detection and disease 
 Clone the project repository and navigate to the project folder:
 
 ```sh
-git clone https://github.com/Paribartan-Timalsina/KrishiVue-Frontend.git
+git clone https://github.com/Paribartan-Timalsina/KrishiVue.git
 cd krishivue
 ```
 
