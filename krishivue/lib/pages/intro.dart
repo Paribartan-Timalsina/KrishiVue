@@ -1,34 +1,41 @@
+/// Splash screen (intro screen) for KrishiVue app
+/// 
+/// Displays app logo with fade-in animation for 3 seconds
+/// then automatically navigates to the main application
+
 import 'package:flutter/material.dart';
 import 'package:krishivue/pages/landing.dart';
 import "package:krishivue/widgets/bottomnavbar.dart";
 
+/// Splash screen widget that shows on app launch
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  /// Opacity value for fade-in animation (0.0 = invisible, 1.0 = fully visible)
   double _opacity = 0.0;
 
   @override
   void initState() {
     super.initState();
 
-    // Delay navigation to the landing screen by 5 seconds
+    // Navigate to main screen after 3 seconds delay
     Future.delayed(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              CustomBottomNavigationBar(), // Replace with your landing screen widget
+          builder: (context) => CustomBottomNavigationBar(),
         ),
       );
     });
 
-    // Start the fade-in animation
+    // Start fade-in animation after 1 second delay
+    // This creates a nice entrance effect for the logo
     Future.delayed(Duration(seconds: 1), () {
       setState(() {
-        _opacity = 1.0;
+        _opacity = 1.0; // Fade logo to fully visible
       });
     });
   }
@@ -36,43 +43,42 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Colors.grey[300],
       body: SafeArea(
-        //padding: const EdgeInsets.fromLTRB(0.5,0.5,0.5,0.5),
         child: Container(
-          width:
-              MediaQuery.of(context).size.width * 1, // 100% of the screen width
-          height: MediaQuery.of(context).size.height *1, // 100% of the screen height
+          // Full screen dimensions
+          width: MediaQuery.of(context).size.width * 1,
+          height: MediaQuery.of(context).size.height * 1,
+          
+          // Background image with semi-transparent overlay
           decoration: BoxDecoration(
-              image: DecorationImage(
-            image: AssetImage(
-              'assets/back.jpg',
-            ),
-            fit: BoxFit.fill,
-            colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(
-                  0.2), // Adjust opacity here (0.5 for 50% transparency)
-              BlendMode.dstATop, // This blend mode makes the image transparent
-            ),
-          )),
+            image: DecorationImage(
+              image: AssetImage('assets/back.jpg'),
+              fit: BoxFit.fill,
+              colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.2), // 20% transparency
+                BlendMode.dstATop,
+              ),
+            )
+          ),
+          
+          // Animated logo with fade-in effect
           child: AnimatedOpacity(
             opacity: _opacity,
-            duration: Duration(seconds: 1), // Adjust the animation duration
+            duration: Duration(seconds: 1), // 1 second fade-in animation
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
+                // Circular logo container
                 ClipOval(
                   child: Container(
-                    width: 400, // Adjust the width and height as needed
+                    width: 400,
                     height: 400,
-                    color: Colors
-                        .transparent, // Set a transparent color to avoid clipping issues
+                    color: Colors.transparent,
                     child: Center(
                       child: Image.asset(
-                        'assets/logo.png', // Replace with your image path
-                        fit: BoxFit
-                            .cover, // You can adjust the BoxFit property as needed
+                        'assets/logo.png',
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),

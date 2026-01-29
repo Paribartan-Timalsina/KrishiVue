@@ -1,3 +1,0 @@
-Gun
-Triangle 
-toy_Car
