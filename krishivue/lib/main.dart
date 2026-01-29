@@ -2,45 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:krishivue/pages/intro.dart';
 import 'package:krishivue/pages/landing.dart';
 import "package:krishivue/widgets/bottomnavbar.dart";
+import 'package:flutter/services.dart';
 
-void main() {
+/// Main entry point for the KrishiVue application
+/// Initializes the app with portrait-only orientation and sets up routing
+void main() async {
+  // Ensure Flutter framework is initialized before making async calls
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Lock screen orientation to portrait mode only
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  
+  // Start the app with MaterialApp and define navigation routes
   runApp(MaterialApp(
-    initialRoute: '/',
+    initialRoute: '/', // Start with splash screen
     routes: {
-      "/":(context)=>SplashScreen(),
-      '/landing':(context)=>CustomBottomNavigationBar(),
-      
-      
-
+      "/": (context) => SplashScreen(), // Splash/intro screen
+      '/landing': (context) => CustomBottomNavigationBar(), // Main app screen with bottom navigation
     },
   ));
 }
-
-
-
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import '../pages/home_view.dart';
-
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-//   runApp(MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Object Detection TFLite',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//         visualDensity: VisualDensity.adaptivePlatformDensity,
-//       ),
-//       home: HomeView(),
-//     );
-//   }
-// }
-
-
-

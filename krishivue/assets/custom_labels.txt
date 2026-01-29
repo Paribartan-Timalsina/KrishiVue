@@ -1,3 +1,0 @@
-0 Gun
-1 Triangle
-2 toy_Car
