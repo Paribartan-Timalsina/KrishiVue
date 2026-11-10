@@ -59,10 +59,9 @@ class _AboutUsState extends State<AboutUs> {
       'rainfall':double.parse(rainController.text),
       
      };
-    // print(data);
       final myString = await json.encode(data);
        print(myString);
-     final Uri uri = Uri.parse('http://192.168.1.66:8000/predictCrop'); // Replace with your API endpoint URL
+     final Uri uri = Uri.parse('http://192.168.1.66:8000/predictCrop');
 
   try {
     final response = await http.post(
@@ -77,7 +76,6 @@ class _AboutUsState extends State<AboutUs> {
       
 _showResultModal(jsonResponse['prediction']);
 
-
     } else {
       print('Post request failed with status: ${response.statusCode}');
       print('Response: ${response.body}');
@@ -85,8 +83,6 @@ _showResultModal(jsonResponse['prediction']);
   } catch (error) {
     print('Error making post request: $error');
   }
-
-
 
   }
   @override
@@ -189,9 +185,6 @@ SizedBox(height: 14,),
 
 SizedBox(height: 14,),
 
-
-
-
                 TextFormField(
               validator: (value){
                 if(value == null||value.isEmpty){
@@ -215,10 +208,7 @@ SizedBox(height: 14,),
               ),
             ),
 
-
-
 SizedBox(height: 14,),
-
 
                 TextFormField(
               validator: (value){
@@ -242,9 +232,6 @@ SizedBox(height: 14,),
                 suffixIcon: Icon(Icons.delete_outline)
               ),
             ),
-
-
-
 
 SizedBox(height: 14,),
 
@@ -272,10 +259,6 @@ SizedBox(height: 14,),
             ),
 SizedBox(height: 14,),
 
-
-
-
-
                 TextFormField(
               validator: (value){
                 if(value == null||value.isEmpty){
@@ -299,23 +282,9 @@ SizedBox(height: 14,),
               ),
             ),
 
-
-
-
-
-
-
-            
-
-
-
-            
             ElevatedButton.icon(onPressed: (){
               print('${nController.text}');
-               // Validate returns true if the form is valid, or false otherwise.
     if (_formKey.currentState!.validate()) {
-      // If the form is valid, display a snackbar. In the real world,
-      // you'd often call a server or save the information in a database.
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Processing Data')),
         

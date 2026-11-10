@@ -72,14 +72,11 @@ class _AboutUsState extends State<ContactUs> with SingleTickerProviderStateMixin
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: <Widget>[
-                    // Logo
                     Image.asset(
                       'assets/logo.png',
                       height: 50,
                     ),
-                    // Spacer for some distance between logo and text
                     SizedBox(width: 10),
-                    // Text "KrishiVUe"
                     Text(
                       'KrishiVue',
                       style: TextStyle(
@@ -90,9 +87,8 @@ class _AboutUsState extends State<ContactUs> with SingleTickerProviderStateMixin
                   ],
                 ),
               ),
-              // Light line below the logo
               Divider(
-                color: Colors.grey, // Adjust color as needed
+                color: Colors.grey,
                 thickness: 0.5,
                 height: 10,
               ),
@@ -188,7 +184,7 @@ class _AboutUsState extends State<ContactUs> with SingleTickerProviderStateMixin
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
-                  color: const Color.fromARGB(255, 238, 228, 136), // Change background color here
+                  color: const Color.fromARGB(255, 238, 228, 136),
                 ),
                 padding: EdgeInsets.all(16),
                 child: Column(
@@ -197,30 +193,30 @@ class _AboutUsState extends State<ContactUs> with SingleTickerProviderStateMixin
                     Text(
                       'Key Features',
                       style: TextStyle(
-                        fontSize: 24, // Increased font size
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 12), // Added space
+                    SizedBox(height: 12),
                     Text(
                       '1. Real-time Crop Monitoring',
-                      style: TextStyle(fontSize: 18), // Increased font size
+                      style: TextStyle(fontSize: 18),
                     ),
-                    SizedBox(height: 8), // Added space
+                    SizedBox(height: 8),
                     Text(
                       '2. Intelligent Pest Detection',
-                      style: TextStyle(fontSize: 18), // Increased font size
+                      style: TextStyle(fontSize: 18),
                     ),
                    
-                    SizedBox(height: 8), // Added space
+                    SizedBox(height: 8),
                     Text(
                       '4. Crop Disease Identification',
-                      style: TextStyle(fontSize: 18), // Increased font size
+                      style: TextStyle(fontSize: 18),
                     ),
-                    SizedBox(height: 8), // Added space
+                    SizedBox(height: 8),
                     Text(
                       '5. Yield Prediction ',
-                      style: TextStyle(fontSize: 18), // Increased font size
+                      style: TextStyle(fontSize: 18),
                     ),
                   ],
                 ),

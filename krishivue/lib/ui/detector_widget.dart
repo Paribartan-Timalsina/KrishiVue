@@ -1,8 +1,3 @@
-/// Real-time object detection widget using device camera
-/// 
-/// This widget handles camera initialization, live frame processing,
-/// and displays detection results with bounding boxes
-
 import 'dart:async';
 import 'package:krishivue/pages/previewpage.dart';
 import 'package:camera/camera.dart';
@@ -14,8 +9,6 @@ import '../ui/box_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:convert';
 
-/// Widget that provides real-time object detection from camera feed
-/// Sends each camera frame for ML inference in a background isolate
 class DetectorWidget extends StatefulWidget {
   const DetectorWidget({super.key});
 
@@ -25,49 +18,35 @@ class DetectorWidget extends StatefulWidget {
 
 class _DetectorWidgetState extends State<DetectorWidget>
     with WidgetsBindingObserver {
-  /// List of available cameras on the device
   List<CameraDescription>? cameras;
   
-  /// Whether rear camera is currently selected (true) or front camera (false)
   bool _isRearCameraSelected = true;
   
-  /// Camera controller for managing camera operations
   CameraController? _cameraController;
 
-  /// Getter for initialized camera controller (assumes it's not null when used)
   get _controller => _cameraController;
 
-  /// Object detector running on a background isolate
-  /// Null until initialization completes
   Detector? _detector;
   
-  /// Subscription to detection results stream from the background isolate
   StreamSubscription? _subscription;
 
-  /// Current detection results for drawing bounding boxes
   List<Recognition>? results;
 
   @override
   void initState() {
     super.initState();
-    // Observe app lifecycle changes (pause/resume)
     WidgetsBinding.instance.addObserver(this);
     _initStateAsync();
   }
 
-  /// Asynchronously initialize camera and detector
   void _initStateAsync() async {
-    // Get list of available cameras on device
     cameras = await availableCameras();
     
-    // Initialize camera preview and start image stream
     _initializeCamera(cameras![0]);
     
-    // Spawn detector in background isolate for ML inference
     Detector.start().then((instance) {
       setState(() {
         _detector = instance;
-        // Listen to detection results stream
         _subscription = instance.resultsStream.stream.listen((values) {
           setState(() {
             results = values['recognitions'];
@@ -77,59 +56,39 @@ class _DetectorWidgetState extends State<DetectorWidget>
     });
   }
 
-  /// Initialize camera with specified camera description
-  /// 
-  /// Sets up camera controller, starts image stream, and stores preview size
   void _initializeCamera(CameraDescription cameraDescription) async {
-    // Create camera controller with low resolution for better performance
+    // Low resolution keeps per-frame detection fast.
     _cameraController = CameraController(
       cameraDescription,
       ResolutionPreset.low,
       enableAudio: false,
     )..initialize().then((_) async {
-        // Start streaming camera frames for detection
         await _controller.startImageStream(onLatestImageAvailable);
         setState(() {});
 
-        // Store preview size for scaling bounding boxes
-        // 352x288 on iOS, 240p (320x240) on Android with ResolutionPreset.low
+        // Used to scale boxes onto the preview.
         ScreenParams.previewSize = _controller.value.previewSize!;
       });
   }
 
-  /// Capture a picture and navigate to preview page with detection results
-  /// 
-  /// Captures current frame, packages the best detection result with bounding
-  /// box coordinates, and passes to preview page for cropping/display
   Future takePicture() async {
     try {
-      print("Camera capture button clicked");
-      
-      // Capture current frame from camera
       XFile picture = await _cameraController!.takePicture();
       
-      print("Detection results before sorting:");
-      print(results);
-      
-      print("Detection results after sorting:");
-      print(results?[0]);
-      print(results![0].location.left);
-      
-      // Package bounding box data for the detected object with highest confidence
+      // Send the first detection's box, in the detector's 300x300 input space,
+      // so the backend can crop the photo to it.
       final rectData = {
         'left': results![0].location.left,
         'top': results![0].location.top,
         'width': results![0].location.width,
         'height': results![0].location.height,
-        'scheight': 300,  // Model input height
-        'scwidth': 300,   // Model input width
+        'scheight': 300,
+        'scwidth': 300,
       };
       
-      // Convert bounding box data to JSON string for passing to preview page
       final myString = await json.encode(rectData);
       print(myString);
       
-      // Navigate to preview page with captured image and bounding box data
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -139,7 +98,6 @@ class _DetectorWidgetState extends State<DetectorWidget>
                   )));
                   
     } catch (e) {
-      // Show error message in snackbar if capture fails
       final snackBar = SnackBar(
         content: Text("$e", style: TextStyle(fontSize: 20)),
         backgroundColor: Color.fromARGB(255, 223, 101, 44),
@@ -163,29 +121,24 @@ class _DetectorWidgetState extends State<DetectorWidget>
 
   @override
   Widget build(BuildContext context) {
-    // Show empty container while camera is initializing
     if (_cameraController == null || !_controller.value.isInitialized) {
       return const SizedBox.shrink();
     }
 
-    // Calculate aspect ratio for proper camera preview display
     var aspect = 1 / _controller.value.aspectRatio;
 
     return Stack(
       children: [
-        // Camera preview layer
         AspectRatio(
           aspectRatio: aspect,
           child: CameraPreview(_controller),
         ),
         
-        // Bounding boxes overlay layer
         AspectRatio(
           aspectRatio: aspect,
           child: _boundingBoxes(),
         ),
         
-        // Bottom control panel with camera switch and capture buttons
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
@@ -198,7 +151,6 @@ class _DetectorWidgetState extends State<DetectorWidget>
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Camera switch button (front/rear)
                 Expanded(
                   child: IconButton(
                     padding: EdgeInsets.zero,
@@ -213,12 +165,10 @@ class _DetectorWidgetState extends State<DetectorWidget>
                       setState(() {
                         _isRearCameraSelected = !_isRearCameraSelected;
                       });
-                      // Reinitialize camera with selected camera (0: rear, 1: front)
                       _initializeCamera(cameras![_isRearCameraSelected ? 0 : 1]);
                     },
                   ),
                 ),
-                // Capture button
                 Expanded(
                   child: IconButton(
                     onPressed: takePicture,
@@ -237,7 +187,6 @@ class _DetectorWidgetState extends State<DetectorWidget>
     );
   }
 
-  /// Build stack of bounding boxes for all detected objects
   Widget _boundingBoxes() {
     if (results == null) {
       return const SizedBox.shrink();
@@ -246,31 +195,25 @@ class _DetectorWidgetState extends State<DetectorWidget>
         children: results!.map((box) => BoxWidget(result: box)).toList());
   }
 
-  /// Callback invoked for each camera frame
-  /// Sends frame to detector for ML inference in background isolate
   void onLatestImageAvailable(CameraImage cameraImage) async {
     _detector?.processFrame(cameraImage);
   }
 
-  /// Handle app lifecycle changes (pause/resume)
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.inactive:
-        // Stop camera and detector when app goes to background
         _cameraController?.stopImageStream();
         _detector?.stop();
         _subscription?.cancel();
         break;
       case AppLifecycleState.resumed:
-        // Restart camera and detector when app returns to foreground
         _initStateAsync();
         break;
       default:
     }
   }
 
-  /// Clean up resources when widget is disposed
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);

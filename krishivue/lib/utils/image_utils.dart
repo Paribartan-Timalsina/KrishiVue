@@ -68,10 +68,7 @@ image_lib.Image convertYUV420ToImage(CameraImage cameraImage) {
 }
 
 image_lib.Image convertBGRA8888ToImage(CameraImage cameraImage) {
-  // Extract the bytes from the CameraImage
   final bytes = cameraImage.planes[0].bytes;
-
-  // Create a new Image instance
   final image = image_lib.Image.fromBytes(
     width: cameraImage.width,
     height: cameraImage.height,
@@ -83,27 +80,19 @@ image_lib.Image convertBGRA8888ToImage(CameraImage cameraImage) {
 }
 
 image_lib.Image convertJPEGToImage(CameraImage cameraImage) {
-  // Extract the bytes from the CameraImage
   final bytes = cameraImage.planes[0].bytes;
-
-  // Create a new Image instance from the JPEG bytes
   final image = image_lib.decodeImage(bytes);
 
   return image!;
 }
 
 image_lib.Image convertNV21ToImage(CameraImage cameraImage) {
-  // Extract the bytes from the CameraImage
   final yuvBytes = cameraImage.planes[0].bytes;
   final vuBytes = cameraImage.planes[1].bytes;
-
-  // Create a new Image instance
   final image = image_lib.Image(
     width: cameraImage.width,
     height: cameraImage.height,
   );
-
-  // Convert NV21 to RGB
   convertNV21ToRGB(
     yuvBytes,
     vuBytes,
@@ -117,11 +106,6 @@ image_lib.Image convertNV21ToImage(CameraImage cameraImage) {
 
 void convertNV21ToRGB(Uint8List yuvBytes, Uint8List vuBytes, int width,
     int height, image_lib.Image image) {
-  // Conversion logic from NV21 to RGB
-  // ...
-
-  // Example conversion logic using the `imageLib` package
-  // This is just a placeholder and may not be the most efficient method
   for (var y = 0; y < height; y++) {
     for (var x = 0; x < width; x++) {
       final yIndex = y * width + x;
@@ -130,13 +114,9 @@ void convertNV21ToRGB(Uint8List yuvBytes, Uint8List vuBytes, int width,
       final yValue = yuvBytes[yIndex];
       final uValue = vuBytes[uvIndex * 2];
       final vValue = vuBytes[uvIndex * 2 + 1];
-
-      // Convert YUV to RGB
       final r = yValue + 1.402 * (vValue - 128);
       final g = yValue - 0.344136 * (uValue - 128) - 0.714136 * (vValue - 128);
       final b = yValue + 1.772 * (uValue - 128);
-
-      // Set the RGB pixel values in the Image instance
       image.setPixelRgba(x, y, r.toInt(), g.toInt(), b.toInt(), 255);
     }
   }

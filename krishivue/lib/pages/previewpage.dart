@@ -22,13 +22,8 @@ class _PreviewPageState extends State<PreviewPage> {
     uploading=true;
   });
    print(widget.myString);
-  // Create a POST request to your Flask API endpoint
-  var url = await  Uri.parse('http://192.168.0.128:8000/predictCropDisease'); // Replace with your API endpoint URL
-
-  // Create a multipart request
+  var url = await  Uri.parse('http://192.168.0.128:8000/predictCropDisease');
   var request = await  http.MultipartRequest('POST', url);
-
-  // Add the image file to the request
   var file = File(widget.picture.path);
   print("The picture is : ${file}");
   var stream = http.ByteStream(file.openRead());
@@ -37,17 +32,11 @@ class _PreviewPageState extends State<PreviewPage> {
   print("The multipart file is : ${multipartFile}");
   request.files.add(multipartFile);
   request.fields['myString']=widget.myString;
-
-  // Send the request
   var response = await request.send();
-
-  // Check the response status code
   if (response.statusCode == 200) {
      try {
   var jsonResponse = await response.stream.bytesToString();
   var decodedResponse = await json.decode(jsonResponse);
-  
-  // Print the decoded JSON response
   print('Response: $decodedResponse');
 
   Navigator.push(
@@ -62,10 +51,7 @@ setState(() {
 } catch (e) {
   print('Error decoding JSON response: $e');
 }
-    // Request was successful
-    // You can handle the response here if the server sends any data back
   } else {
-    // Request failed
     print('Error: ${response.reasonPhrase}');
   }
 }
@@ -93,20 +79,15 @@ setState(() {
           const SizedBox(height: 24),
 
            Container(
-                          //elese show uplaod button
                           child:
                           uploading?CircularProgressIndicator(): ElevatedButton.icon(
                           onPressed: ()  async {
                             
                              uploadImage();
-                            //start uploading image
                           },
                           icon: Icon(Icons.file_upload,
                           size: 50,),
                           label: Text("UPLOAD IMAGE"),
-        
-                          //set brghtness to dark, because deepOrangeAccent is darker coler
-                          //so that its text color is light
                         )),
 
         ]),
