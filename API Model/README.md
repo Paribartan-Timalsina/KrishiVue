@@ -77,12 +77,6 @@ API Model/
 │   │   └── Potato___Late_blight/  (300 images)
 │   └── Valid/
 │       └── [same structure, 100 each]
-├── cropYield Data/                # Crop yield datasets
-│   ├── pesticides.csv
-│   ├── rainfall.csv
-│   ├── temp.csv
-│   ├── yield_df.csv
-│   └── yield.csv
 ├── training.ipynb                 # Disease model training notebook
 ├── Crop Recommendation.ipynb      # Crop recommendation training
 ├── Crop_recommendation.csv        # Training data for crop model

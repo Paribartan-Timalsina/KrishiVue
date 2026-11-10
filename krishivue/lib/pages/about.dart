@@ -1,9 +1,4 @@
-import 'dart:io';
 import 'dart:convert';
-import 'dart:async';
-import 'dart:isolate';
-import 'package:path/path.dart' as Path;
-import 'package:krishivue/pages/prediction.dart';
 import 'package:flutter/material.dart';
 import 'package:krishivue/widgets/app_bar.dart';
 import "package:http/http.dart" as http;

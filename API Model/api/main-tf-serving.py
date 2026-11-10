@@ -20,7 +20,6 @@ from starlette.responses import JSONResponse
 import numpy as np
 from io import BytesIO
 from PIL import Image
-import tensorflow as tf
 import os
 
 # Suppress TensorFlow logging (only show errors)

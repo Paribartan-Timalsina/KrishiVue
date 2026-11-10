@@ -1,10 +1,9 @@
 /// Real-time object detection widget using device camera
 /// 
 /// This widget handles camera initialization, live frame processing,
-/// and displays detection results with bounding boxes and stats
+/// and displays detection results with bounding boxes
 
 import 'dart:async';
-import 'dart:isolate';
 import 'package:krishivue/pages/previewpage.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,6 @@ import '../models/recognition.dart';
 import '../models/screen_params.dart';
 import '../service/detector_service.dart';
 import '../ui/box_widget.dart';
-import '../ui/stats_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:convert';
 
@@ -49,9 +47,6 @@ class _DetectorWidgetState extends State<DetectorWidget>
   /// Current detection results for drawing bounding boxes
   List<Recognition>? results;
 
-  /// Real-time performance statistics (inference time, FPS, etc.)
-  Map<String, String>? stats;
-
   @override
   void initState() {
     super.initState();
@@ -76,7 +71,6 @@ class _DetectorWidgetState extends State<DetectorWidget>
         _subscription = instance.resultsStream.stream.listen((values) {
           setState(() {
             results = values['recognitions'];
-            stats = values['stats'];
           });
         });
       });
@@ -242,25 +236,6 @@ class _DetectorWidgetState extends State<DetectorWidget>
       ],
     );
   }
-
-  /// Widget to display performance statistics (optional, currently disabled)
-  Widget _statsWidget() => (stats != null)
-      ? Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            color: Colors.white.withAlpha(150),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: stats!.entries
-                    .map((e) => StatsWidget(e.key, e.value))
-                    .toList(),
-              ),
-            ),
-          ),
-        )
-      : const SizedBox.shrink();
 
   /// Build stack of bounding boxes for all detected objects
   Widget _boundingBoxes() {

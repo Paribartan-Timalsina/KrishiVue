@@ -20,11 +20,9 @@ import os
 # Suppress TensorFlow logging (only show errors)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-import requests
 from fastapi.middleware.cors import CORSMiddleware
 import joblib
 from pydantic import BaseModel
-import json
 
 # ============================================================================
 # MODEL INITIALIZATION
@@ -64,10 +62,6 @@ app.add_middleware(
 # ============================================================================
 # DATA MODELS (Request/Response Schemas)
 # ============================================================================
-
-class UserInput(BaseModel):
-    """Simple user input model (currently unused)"""
-    user_input: float
 
 class Package(BaseModel):
     """

@@ -1,7 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'dart:convert';
 
 import 'package:krishivue/pages/landing.dart';
 class DetectionPage extends StatefulWidget {

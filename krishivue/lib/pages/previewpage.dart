@@ -2,7 +2,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:convert';
-import "package:image/image.dart" as image_lib;
 import 'package:krishivue/pages/detection.dart';
 import 'package:http/http.dart' as http;
 
@@ -66,7 +65,6 @@ setState(() {
     // Request was successful
     // You can handle the response here if the server sends any data back
   } else {
-    myResult();
     // Request failed
     print('Error: ${response.reasonPhrase}');
   }
@@ -117,17 +115,3 @@ setState(() {
   }
 }
 
-Widget myResult(){
-  print('i AM HERE');
-  return Container(
-    
-    //body: SafeArea(
-      child: Column(children:<Widget> [
-        
-   CircularProgressIndicator()
-      ]),
-   // )
-
-  
-  );
-}

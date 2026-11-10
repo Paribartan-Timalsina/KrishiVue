@@ -230,28 +230,19 @@ class _DetectorServer {
   }
 
   void _convertCameraImage(CameraImage cameraImage) {
-    var preConversionTime = DateTime.now().millisecondsSinceEpoch;
-
     convertCameraImageToImage(cameraImage).then((image) {
       if (image != null) {
         if (Platform.isAndroid) {
           image = image_lib.copyRotate(image, angle: 90);
         }
 
-        final results = analyseImage(image, preConversionTime);
+        final results = analyseImage(image);
         _sendPort.send(_Command(_Codes.result, args: [results]));
       }
     });
   }
 
-  Map<String, dynamic> analyseImage(
-      image_lib.Image? image, int preConversionTime) {
-    var conversionElapsedTime =
-        DateTime.now().millisecondsSinceEpoch - preConversionTime;
-
-    var preProcessStart = DateTime.now().millisecondsSinceEpoch;
-
-
+  Map<String, dynamic> analyseImage(image_lib.Image? image) {
     /// Pre-process the image
     /// Resizing image for model [300, 300]
     final imageInput = image_lib.copyResize(
@@ -271,11 +262,6 @@ class _DetectorServer {
          } 
       ),
     );
-
-    var preProcessElapsedTime =
-        DateTime.now().millisecondsSinceEpoch - preProcessStart;
-
-    var inferenceTimeStart = DateTime.now().millisecondsSinceEpoch;
 
     final output = _runInference(imageMatrix);
 
@@ -319,22 +305,7 @@ class _DetectorServer {
     }
     //print(recognitions);
 
-    var inferenceElapsedTime =
-        DateTime.now().millisecondsSinceEpoch - inferenceTimeStart;
-
-    var totalElapsedTime =
-        DateTime.now().millisecondsSinceEpoch - preConversionTime;
-
-    return {
-      "recognitions": recognitions,
-      "stats": <String, String>{
-        'Conversion time:': conversionElapsedTime.toString(),
-        'Pre-processing time:': preProcessElapsedTime.toString(),
-        'Inference time:': inferenceElapsedTime.toString(),
-        'Total prediction time:': totalElapsedTime.toString(),
-        'Frame': '${image.width} X ${image.height}',
-      },
-    };
+    return {"recognitions": recognitions};
   }
 
   /// Object detection main function

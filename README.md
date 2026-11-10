@@ -77,12 +77,6 @@ API Model/
 │   │   └── Potato___Late_blight/  (300 images)
 │   └── Valid/
 │       └── [same structure, 100 each]
-├── cropYield Data/                # Crop yield datasets
-│   ├── pesticides.csv
-│   ├── rainfall.csv
-│   ├── temp.csv
-│   ├── yield_df.csv
-│   └── yield.csv
 ├── training.ipynb                 # Disease model training notebook
 ├── Crop Recommendation.ipynb      # Crop recommendation training
 ├── Crop_recommendation.csv        # Training data for crop model
@@ -262,9 +256,7 @@ lib/
 ├── pages/                    # UI screens
 │   ├── intro.dart           # Splash screen
 │   ├── landing.dart         # Main landing page
-│   ├── camerapage.dart      # Camera interface
 │   ├── detection.dart       # Detection results
-│   ├── prediction.dart      # Crop prediction
 │   ├── previewpage.dart     # Image preview
 │   ├── previewgallery.dart  # Gallery preview
 │   ├── about.dart           # About page
@@ -272,12 +264,10 @@ lib/
 ├── ui/                      # UI components
 │   ├── home_view.dart       # Home view wrapper
 │   ├── detector_widget.dart # Object detector widget
-│   ├── box_widget.dart      # Bounding box widget
-│   └── stats_widget.dart    # Stats display widget
+│   └── box_widget.dart      # Bounding box widget
 ├── widgets/                 # Reusable widgets
 │   ├── app_bar.dart         # Custom app bar
-│   ├── bottomnavbar.dart    # Bottom navigation
-│   └── nav_drawer.dart      # Navigation drawer
+│   └── bottomnavbar.dart    # Bottom navigation
 ├── service/                 # Services
 │   └── detector_service.dart # ML detection service
 └── utils/                   # Utilities
@@ -287,8 +277,6 @@ assets/
 ├── models/
 │   ├── final.tflite         # TFLite object detection model
 │   └── labelmap.txt         # Model labels
-├── images/
-│   └── tfl_logo.png         # TensorFlow logo
 ├── back.jpg                 # Background image
 └── logo.png                 # App logo
 ```
@@ -369,13 +357,9 @@ dependencies:
   cupertino_icons: ^1.0.5
   tflite_flutter: ^0.10.1      # TFLite runtime
   camera: ^0.10.5+5            # Camera access
-  path_provider: ^2.0.15       # File paths
-  path: ^1.8.3                 # Path utilities
   image_picker: ^1.0.0         # Image selection
   http: ^1.1.0                 # HTTP requests
   image: ^4.0.17               # Image processing
-  tflite_v2: ^1.0.0            # Additional TFLite support
-  exif: ^3.1.4                 # EXIF data handling
 ```
 
 ## Troubleshooting

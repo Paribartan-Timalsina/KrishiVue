@@ -1,8 +1,6 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
-import 'package:exif/exif.dart';
 import 'package:image/image.dart' as image_lib;
 
 Future<image_lib.Image?> convertCameraImageToImage(
@@ -142,40 +140,4 @@ void convertNV21ToRGB(Uint8List yuvBytes, Uint8List vuBytes, int width,
       image.setPixelRgba(x, y, r.toInt(), g.toInt(), b.toInt(), 255);
     }
   }
-}
-
-/// ROTATION changes - not working as need to be from the Exif (which is empty)
-
-Future<int> getExifRotation(CameraImage cameraImage) async {
-  final exifData = await readExifFromBytes(cameraImage.planes[0].bytes);
-  final ifd = exifData['Image Orientation'];
-
-  if (ifd != null) {
-    return ifd.values.toList()[0];
-  }
-  return 1;
-}
-
-image_lib.Image applyExifRotation(image_lib.Image image, int exifRotation) {
-  if (exifRotation == 1) {
-    return image_lib.copyRotate(image, angle: 0);
-  } else if (exifRotation == 3) {
-    return image_lib.copyRotate(image, angle: 180);
-  } else if (exifRotation == 6) {
-    return image_lib.copyRotate(image, angle: 90);
-  } else if (exifRotation == 8) {
-    return image_lib.copyRotate(image, angle: 270);
-  }
-
-  return image;
-}
-
-Future<void> saveImage(
-  image_lib.Image image,
-  String path,
-  String name,
-) async {
-  Uint8List bytes = image_lib.encodeJpg(image);
-  final fileOnDevice = File('$path/$name.jpg');
-  await fileOnDevice.writeAsBytes(bytes, flush: true);
 }

@@ -5,15 +5,10 @@
 /// 2. Gallery image upload (select existing photo for analysis)
 
 import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:krishivue/ui/home_view.dart';
-import 'dart:async';
 import 'dart:io';
-import "package:krishivue/widgets/bottomnavbar.dart";
-import 'package:krishivue/pages/detection.dart';
 import 'package:krishivue/widgets/app_bar.dart';
-import 'package:krishivue/widgets/nav_drawer.dart';
 import "package:krishivue/pages/previewgallery.dart";
 
 /// Main landing page widget
@@ -25,12 +20,6 @@ class Landing extends StatefulWidget {
 class LandingState extends State<Landing> {
   /// Selected image file from gallery (null if no image selected)
   XFile? uploadimage;
-  
-  /// Current page index for navigation
-  int currentPageIndex = 0;
-  
-  /// Controls visibility of bottom navigation bar (not currently used)
-  bool showBottomNavBar = true;
 
   /// Open image picker to select image from device gallery
   Future<void> chooseImage() async {
